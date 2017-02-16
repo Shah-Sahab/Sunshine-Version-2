@@ -38,6 +38,8 @@ import android.widget.TextView;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
 
+import static android.R.attr.description;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -186,6 +188,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
             // Use weather art image
             mIconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
+            mIconView.setContentDescription(getString(R.string.a11y_forecast_icon, description));
 
             // Read date from cursor and update views for day of week and date
             long date = data.getLong(COL_WEATHER_DATE);
@@ -194,9 +197,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mFriendlyDateView.setText(friendlyDateText);
             mDateView.setText(dateText);
 
-            // Read description from cursor and update view
-            String description = data.getString(COL_WEATHER_DESC);
+            // Get description from weather condition id
+            String description = Utility.getStringForWeatherCondition(getActivity(), weatherId);
             mDescriptionView.setText(description);
+            mDescriptionView.setContentDescription(getString(R.string.a11y_forecast, description));
+
 
             // Read high temperature from cursor and update view
             boolean isMetric = Utility.isMetric(getActivity());
@@ -204,24 +209,29 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             double high = data.getDouble(COL_WEATHER_MAX_TEMP);
             String highString = Utility.formatTemperature(getActivity(), high, isMetric);
             mHighTempView.setText(highString);
+            mHighTempView.setContentDescription(getString(R.string.a11y_high_temp, highString));
 
             // Read low temperature from cursor and update view
             double low = data.getDouble(COL_WEATHER_MIN_TEMP);
             String lowString = Utility.formatTemperature(getActivity(), low, isMetric);
             mLowTempView.setText(lowString);
+            mLowTempView.setContentDescription(getString(R.string.a11y_low_temp, lowString));
 
             // Read humidity from cursor and update view
             float humidity = data.getFloat(COL_WEATHER_HUMIDITY);
             mHumidityView.setText(getActivity().getString(R.string.format_humidity, humidity));
+            mHumidityView.setContentDescription(mHumidityView.getText());
 
             // Read wind speed and direction from cursor and update view
             float windSpeedStr = data.getFloat(COL_WEATHER_WIND_SPEED);
             float windDirStr = data.getFloat(COL_WEATHER_DEGREES);
             mWindView.setText(Utility.getFormattedWind(getActivity(), windSpeedStr, windDirStr));
+            mWindView.setContentDescription(mWindView.getText());
 
             // Read pressure from cursor and update view
             float pressure = data.getFloat(COL_WEATHER_PRESSURE);
             mPressureView.setText(getActivity().getString(R.string.format_pressure, pressure));
+            mPressureView.setContentDescription(mPressureView.getText());
 
             // We still need this for the share intent
             mForecast = String.format("%s - %s - %s/%s", dateText, description, high, low);
