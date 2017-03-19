@@ -6,4 +6,9 @@
         <item name="android:colorPrimaryDark">@color/sunshine_dark_blue</item>
     </style>
 
+    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:popupTheme">@style/Theme.AppCompat.Light</item>
+    </style>
+
 </resources>

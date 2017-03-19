@@ -79,6 +79,7 @@
 
         <service
             android:name=".sync.SunshineSyncService"
+            android:enabled="true"
             android:exported="true"
             >
             <intent-filter>
