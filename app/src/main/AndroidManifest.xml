@@ -40,6 +40,7 @@
         </activity>
         <activity
             android:name=".DetailActivity"
+            android:theme="@style/ForecastTheme"
             android:label="@string/title_activity_detail"
             android:parentActivityName=".MainActivity" >
             <meta-data
