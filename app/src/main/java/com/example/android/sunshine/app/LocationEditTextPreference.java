@@ -18,6 +18,7 @@
 package com.example.android.sunshine.app;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -27,12 +28,49 @@ import android.preference.EditTextPreference;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiActivity;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 public class LocationEditTextPreference extends EditTextPreference {
     static final private int DEFAULT_MINIMUM_LOCATION_LENGTH = 2;
     private int mMinLength;
+    public static final int PLACE_PICKER_REQUEST = 1;
+
+    @Override
+    protected View onCreateView(ViewGroup parent) {
+        View view = super.onCreateView(parent);
+
+        View currentLocation = view.findViewById(R.id.current_location);
+        currentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = getContext();
+                Activity settingsActivity = (SettingsActivity) context;
+                try {
+
+                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                    settingsActivity.startActivityForResult(builder.build(settingsActivity), PLACE_PICKER_REQUEST);
+
+
+                } catch (GooglePlayServicesNotAvailableException | GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        return view;
+    }
 
     public LocationEditTextPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -44,6 +82,13 @@ public class LocationEditTextPreference extends EditTextPreference {
             mMinLength = a.getInteger(R.styleable.LocationEditTextPreference_minLength, DEFAULT_MINIMUM_LOCATION_LENGTH);
         } finally {
             a.recycle();
+        }
+
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(getContext());
+        if (resultCode == ConnectionResult.SUCCESS) {
+            // Add the get current location widget to our location preference
+            setWidgetLayoutResource(R.layout.pref_current_layout);
         }
     }
 

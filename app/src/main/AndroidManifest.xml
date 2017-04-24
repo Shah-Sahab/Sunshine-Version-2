@@ -3,8 +3,10 @@
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-sdk tools:overrideLibrary="com.google.firebase.firebase_core, com.google.android.gms.measurement, com.google.android.gms.measurement.impl, com.google.firebase.iid, com.google.firebase
-    , com.google.android.gms.tasks, com.google.android.gms, com.google.firebase.messaging, com.google.android.gms.base" />
+    <!--<uses-sdk tools:overrideLibrary="com.google.firebase.firebase_core, com.google.android.gms.measurement, com.google.android.gms.measurement.impl, com.google.firebase.iid, com.google.firebase-->
+    <!--, com.google.android.gms.tasks, com.google.android.gms, com.google.firebase.messaging, com.google.android.gms.base, com.google.android.gms.location" />-->
+
+    <!--<uses-sdk tools:overrideLibrary="com.google.firebase.firebase_core" />-->
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -17,7 +19,10 @@
         android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 
     <!-- Permissions required to make our UI more friendly -->
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
     <!-- Permissions required for Google Cloud Messaging -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -116,6 +121,19 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@android:color/black" />
 
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBZPDyaW4vNh-bGIrKYqmsFX2rCCb7vCg8"/>
+
+
+        <receiver android:name=".widget.TodayWidgetProvider" android:label="@string/widget_provider_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.android.sunshine.app.ACTION_DATA_UPDATED" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/weather_widget_provider_info" />
+        </receiver>
+
+        <service android:name=".widget.TodayWidgetIntentService" />
 
     </application>
 
