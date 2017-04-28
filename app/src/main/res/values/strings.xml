@@ -234,4 +234,6 @@
     <string name="attribution_text">Powered by Google</string>
     <string name="widget_provider_label">Sunshine Today</string>
 
+    <string name="title_widget_detail">Sunshine Details</string>
+
 </resources>
